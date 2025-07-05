@@ -65,7 +65,25 @@ def infer_single_image(model, model_path: str, image_path: str, save_path: str =
     if save_path:
         pred_clip += 0.5 / 255
         result_image = F.to_pil_image(pred_clip.squeeze(0).cpu(), "RGB")
-        result_image.save(save_path)
-        print(f"Result saved to: {save_path}")
+
+        # Create a side-by-side comparison with original image
+        original_image = Image.open(image_path).convert("RGB")
+
+        # Ensure both images have the same size
+        if result_image.size != original_image.size:
+            result_image = result_image.resize(
+                original_image.size, Image.Resampling.LANCZOS
+            )
+
+        # Create side-by-side image
+        total_width = original_image.width + result_image.width
+        max_height = max(original_image.height, result_image.height)
+
+        side_by_side = Image.new("RGB", (total_width, max_height))
+        side_by_side.paste(original_image, (0, 0))
+        side_by_side.paste(result_image, (original_image.width, 0))
+
+        side_by_side.save(save_path)
+        print(f"Side-by-side comparison saved to: {save_path}")
 
     return pred_clip.squeeze(0).cpu()
