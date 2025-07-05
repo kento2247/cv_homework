@@ -1,0 +1,18 @@
+[project]
+name = "cv-homework"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "gdown>=5.2.0",
+    "numpy>=2.2.6",
+    "opencv-python>=4.11.0.86",
+    "pytorch-msssim>=1.0.0",
+    "scikit-image>=0.25.2",
+    "tensorboard>=2.19.0",
+    "torch>=2.7.1",
+    "torchvision>=0.22.1",
+    "tqdm>=4.67.1",
+    "warmup-scheduler>=0.3",
+]
