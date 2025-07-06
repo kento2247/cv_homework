@@ -5,6 +5,7 @@ from torch.backends import cudnn
 from models.ConvIR import build_net
 from train import _train
 from eval import _eval
+from infer import infer_single_image
 
 def main(args):
     # CUDNN
@@ -26,6 +27,9 @@ def main(args):
 
     elif args.mode == 'test':
         _eval(model, args)
+    
+    elif args.mode == 'infer':
+        infer_single_image(model, args.test_model, args.input_image, args.output_image)
 
 
 if __name__ == '__main__':
@@ -36,7 +40,7 @@ if __name__ == '__main__':
     parser.add_argument('--data', type=str, default='ITS', choices=['ITS', 'Haze4K', 'NHR', 'GTA5', 'real_haze'])
     parser.add_argument('--version', default='small', choices=['small', 'base', 'large'], type=str)
 
-    parser.add_argument('--mode', default='test', choices=['train', 'test'], type=str)
+    parser.add_argument('--mode', default='test', choices=['train', 'test', 'infer'], type=str)
     parser.add_argument('--data_dir', type=str, default='')
 
     # Train for its
@@ -76,6 +80,10 @@ if __name__ == '__main__':
     # Test
     parser.add_argument('--test_model', type=str, default='')
     parser.add_argument('--save_image', type=bool, default=False, choices=[True, False])
+    
+    # Infer
+    parser.add_argument('--input_image', type=str, default='', help='Path to input hazy image')
+    parser.add_argument('--output_image', type=str, default='', help='Path to save dehazed result')
 
     args = parser.parse_args()
     args.model_save_dir = os.path.join('results/', args.model_name, 'Training-Results/')
